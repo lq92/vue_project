@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <h2>test</h2>
+    <div class='tab'>
+      <router-link to='goods'>商品</router-link>
+      <router-link to='ratings'>评价</router-link>
+      <router-link to='seller'>商家</router-link>
+    </div>
     <router-view/>
   </div>
 </template>
@@ -13,10 +17,9 @@ export default {
 
 <style scoped lang='sass'>
 #app
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  .tab
+    display: flex
+    justify-content: space-around
+    .router-link-active
+      color: #f00
 </style>
