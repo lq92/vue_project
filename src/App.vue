@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <v-head></v-head>
     <div class='tab'>
       <router-link to='goods'>商品</router-link>
       <router-link to='ratings'>评价</router-link>
@@ -10,12 +11,35 @@
 </template>
 
 <script>
+const ERR_NO = 0;
+import vHead from '~/head/head'
 export default {
-  name: 'App'
+  name: 'App',
+  data(){
+    return {
+      seller: null,
+      goods: [],
+      ratings: []
+    }
+  },
+  components: {
+    vHead
+  },
+  created(){
+    this.$http.get('/api').then(res => {
+      if(res.body.ERR_NO === ERR_NO){
+        let apiData = res.body.apiData;
+        this.seller = apiData.seller;
+        this.goods = apiData.goods;
+        this.ratings = apiData.ratings;
+      }
+    })
+  }
 }
 </script>
 
-<style scoped lang='sass'>
+<style lang='sass'>
+@import './styles/reset.sass'
 #app
   .tab
     display: flex
