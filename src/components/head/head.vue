@@ -23,12 +23,13 @@
 			<p class='text'>{{ seller.bulletin }}</p>
 			<i class='icon_keyboard_arrow_right'></i>
 		</div>
+		<overlay :seller='seller'></overlay>
 	</div>
 </template>
 
 <script>
 const ERR_NO = 0;
-import score from '~/score/score'
+import overlay from '~/overlay/overlay'
 export default {
 	data(){
 		return {
@@ -41,7 +42,7 @@ export default {
     })
 	},
 	components: {
-		score
+		overlay
 	}
 }	
 </script>

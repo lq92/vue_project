@@ -29,10 +29,9 @@ export default {
 			if(this.hasFloat()){
 				result.push(HALF);
 			}
-			while(result.length < STAR_NO - 1){
+			while(result.length < STAR_NO){
 				result.push(OFF)
 			}
-			console.log(result)
 			return result;
 		}
 	},
