@@ -28,6 +28,7 @@
 
 <script>
 const ERR_NO = 0;
+import score from '~/score/score'
 export default {
 	data(){
 		return {
@@ -38,6 +39,9 @@ export default {
 		this.$http.get('/api/seller').then(res => {
       this.seller = res.body.seller
     })
+	},
+	components: {
+		score
 	}
 }	
 </script>
