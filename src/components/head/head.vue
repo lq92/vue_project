@@ -16,14 +16,14 @@
 					<p class='text'><span class='img'></span>{{ seller.supports[0].description }}</p>
 				</div>	
 			</div>
-			<div class='count' v-if='seller.supports'>{{ seller.supports.length }}个<i class='icon_keyboard_arrow_right'></i></div>
+			<div class='count' v-if='seller.supports' @click='changeOverlay'>{{ seller.supports.length }}个<i class='icon_keyboard_arrow_right'></i></div>
 		</div>
-		<div class='notice'>
+		<div class='notice' @click='changeOverlay'>
 			<span class='img'></span>
 			<p class='text'>{{ seller.bulletin }}</p>
 			<i class='icon_keyboard_arrow_right'></i>
 		</div>
-		<overlay :seller='seller'></overlay>
+		<overlay :seller='seller' :overlay-show='overlayShow' @close='closeOverlay'></overlay>
 	</div>
 </template>
 
@@ -33,7 +33,8 @@ import overlay from '~/overlay/overlay'
 export default {
 	data(){
 		return {
-			seller: {}
+			seller: {},
+			overlayShow: false
 		}
 	},
 	created(){
@@ -43,6 +44,17 @@ export default {
 	},
 	components: {
 		overlay
+	},
+	methods: {
+		changeOverlay(){
+			this._toggle()
+		},
+		closeOverlay(){
+			this._toggle()
+		},
+		_toggle(){
+			this.overlayShow = !this.overlayShow
+		}
 	}
 }	
 </script>
