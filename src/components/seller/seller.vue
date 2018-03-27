@@ -11,9 +11,15 @@
 							<span class='sell_count'>月售{{ seller.sellCount }}单</span>
 						</div>
 					</div>
-					<div class='section_right'>
-						<i class='icon_favorite'></i>
-						<span class='text'>收藏</span>
+					<div class='section_right' @click='collect'>
+						<div v-if='collection' class='favorite'>
+							<i class='icon_favorite icon_active'></i>
+							<span class='text_active text'>已收藏</span>
+						</div>
+						<div v-else class='favorite'>
+							<i class='icon_favorite'></i>
+							<span class='text'>收藏</span>
+						</div>
 					</div>
 				</div>
 				<div class='bottom_wrapper'>
@@ -69,7 +75,8 @@ export default {
 	data(){
 		return {
 			seller: {},
-			seller_page: 'seller_page'
+			seller_page: 'seller_page',
+			collection: JSON.parse(localStorage.getItem('collection'))
 		}
 	},
 	components: {
@@ -83,8 +90,17 @@ export default {
 		})
 		this.$nextTick(() => {
 			new BScroll(this.$refs.pic_wrapper, { scrollX: true })
-			new BScroll(this.$refs.seller_wrapper, {})
+			new BScroll(this.$refs.seller_wrapper, { click: true })
 		})
+	},	
+	methods: {
+		collect(){
+			localStorage.setItem('collection', !JSON.parse(localStorage.getItem('collection')))
+			this.collection = this._collection()
+		},
+		_collection(){
+			return !!JSON.parse(localStorage.getItem('collection'));
+		}
 	}
 }	
 </script>
@@ -120,16 +136,21 @@ export default {
 					.rating_count
 						margin: 0 12px 0 8px
 			.section_right
-				display: flex
-				flex-direction: column
-				align-items: center
-				.icon_favorite
-					font-size: 18px
-					color: rgba(147, 153, 159, 0.4)	
-					margin: 3px 0 6px
-				.text
-					font-size: 10px
-					color: rgb(147, 153, 159)					
+				.favorite
+					display: flex
+					flex-direction: column
+					align-items: center
+					.icon_favorite
+						font-size: 18px
+						color: rgba(147, 153, 159, 0.4)	
+						margin: 3px 0 6px
+					.text
+						font-size: 10px
+						color: rgb(147, 153, 159)	
+					.icon_active
+						color: rgb(240, 20, 20)	
+					.text_active
+						color: rgb(77, 85, 93)			
 		.bottom_wrapper
 			display: flex
 			padding: 18px 0
