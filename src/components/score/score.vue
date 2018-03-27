@@ -46,7 +46,6 @@ export default {
 <style scoped lang='sass'>
 @import '../../styles/image'
 .score
-	width: 100%	
 	.star_wrapper
 		display: flex
 		justify-content: space-between

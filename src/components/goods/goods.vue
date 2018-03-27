@@ -1,7 +1,7 @@
 <template>
 	<div class='goods'>
 		I'm goods
-		<score :size='48' :score='5'></score>
+		<score :size='36' :score='5'></score>
 	</div>
 </template>
 

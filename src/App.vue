@@ -6,7 +6,7 @@
       <router-link to='ratings'>评价</router-link>
       <router-link to='seller'>商家</router-link>
     </div>
-    <router-view/>
+    <router-view :seller='seller' />
   </div>
 </template>
 
@@ -44,6 +44,14 @@ export default {
   .tab
     display: flex
     justify-content: space-around
-    .router-link-active
-      color: #f00
+    align-items: center
+    height: 40px
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+    a
+      font: 
+        size: 14px
+        weight: 400
+      color: #4d555d
+      &.router-link-active
+        color: #f00
 </style>
