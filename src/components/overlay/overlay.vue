@@ -13,7 +13,7 @@
 				<span class='horizental'></span>
 			</div>
 			<div class='supports_wrapper'>
-				<discount :supports='seller.supports'></discount>
+				<discount :supports='seller.supports' :category='overlay'></discount>
 			</div>
 		</div>
 		<div class='notice'>
@@ -50,6 +50,11 @@ export default {
 	methods: {
 		closeSelf(){
 			this.$emit('close')
+		}
+	},
+	data(){
+		return {
+			overlay: 'overlay'
 		}
 	}
 }	

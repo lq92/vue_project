@@ -1,60 +1,89 @@
 <template>
-	<div class='seller'>
-		<div class='description'>
-			<div class='name_wrapper'>
-				<div class='section_left'>
-					<h2 class='name'>{{ seller.name }}</h2>
-					<div class='score_wrapper'>
-						<score :size='36' :score='seller.score'></score>
-						<span class='rating_count'>({{ seller.ratingCount }})</span>
-						<span class='sell_count'>月售{{ seller.sellCount }}单</span>
+	<div class='seller' ref='seller_wrapper'>
+		<div class='container'>
+			<div class='description'>
+				<div class='name_wrapper'>
+					<div class='section_left'>
+						<h2 class='name'>{{ seller.name }}</h2>
+						<div class='score_wrapper'>
+							<score :size='36' :score='seller.score'></score>
+							<span class='rating_count'>({{ seller.ratingCount }})</span>
+							<span class='sell_count'>月售{{ seller.sellCount }}单</span>
+						</div>
+					</div>
+					<div class='section_right'>
+						<i class='icon_favorite'></i>
+						<span class='text'>收藏</span>
 					</div>
 				</div>
-				<div class='section_right'>
-					<i class='icon_favorite'></i>
-					<span class='text'>收藏</span>
+				<div class='bottom_wrapper'>
+					<div class='min_price'>
+						<p>起送价</p>
+						<p class='item'><span class='item_inner'>{{ seller.minPrice }}</span>元</p>
+					</div>
+					<div class='delivery_price'>
+						<p>商家配送</p>
+						<p class='item'><span class='item_inner'>{{ seller.deliveryPrice }}</span>元</p>
+					</div>
+					<div class='delivery_time'>
+						<p>平均配送时间</p>
+						<p class='item'><span class='item_inner'>{{ seller.deliveryTime }}</span>分钟</p>
+					</div>
 				</div>
 			</div>
-			<div class='bottom_wrapper'>
-				<div class='min_price'>
-					<p>起送价</p>
-					<p class='item'><span class='item_inner'>{{ seller.minPrice }}</span>元</p>
-				</div>
-				<div class='delivery_price'>
-					<p>商家配送</p>
-					<p class='item'><span class='item_inner'>{{ seller.deliveryPrice }}</span>元</p>
-				</div>
-				<div class='delivery_time'>
-					<p>平均配送时间</p>
-					<p class='item'><span class='item_inner'>{{ seller.deliveryTime }}</span>分钟</p>
+			<gutter></gutter>
+			<div class='notice'>
+				<h2 class='name'>公告与活动</h2>
+				<p class='text'>{{ seller.bulletin }}</p>
+				<div class='discount_wrapper'>
+					<discount :supports='seller.supports' :category='seller_page'></discount>
 				</div>
 			</div>
-		</div>
-		<gutter></gutter>
-		<div class='notice'></div>
-		<gutter></gutter>
-		<div class='pics'></div>
-		<gutter></gutter>
-		<div class='info'></div>
+			<gutter></gutter>
+			<div class='pics'>
+				<h2 class='name'>商家实景</h2>
+				<div class='pic_wrapper' ref='pic_wrapper'>
+					<div class='item_wrapper'>
+						<img v-for='item in seller.pics' class='item' :src='item' width='120' height='90'>
+					</div>
+				</div>
+			</div>
+			<gutter></gutter>
+			<div class='info'>
+				<h2 class='name'>商家信息</h2>
+				<ul class='item_wrapper'>
+					<li v-for='item in seller.infos' class='item'>{{ item }}</li>
+				</ul>
+			</div>
+		</div>	
 	</div>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
+
 import gutter from '~/gutter/gutter'
 import score from '~/score/score'
+import discount from '~/discount/discount'
 export default {
 	data(){
 		return {
-			seller: {}
+			seller: {},
+			seller_page: 'seller_page'
 		}
 	},
 	components: {
 		gutter,
-		score
+		score,
+		discount
 	},
 	mounted(){
 		this.$http.get('/api/seller').then(res => {
 			this.seller = res.body.seller
+		})
+		this.$nextTick(() => {
+			new BScroll(this.$refs.pic_wrapper, { scrollX: true })
+			new BScroll(this.$refs.seller_wrapper, {})
 		})
 	}
 }	
@@ -63,13 +92,16 @@ export default {
 <style lang='sass' scoped>
 @import '../../assets/style.css'
 .seller
+	height: 492px
+	overflow: hidden
 	.description
 		display: flex
 		flex-direction: column
 		.name_wrapper
 			display: flex
 			justify-content: space-between
-			padding: 18px
+			padding: 18px 0
+			margin: 0 18px
 			border-bottom: 1px solid rgba(7, 17, 27, 0.1)
 			.section_left
 				.name
@@ -119,4 +151,55 @@ export default {
 				border: 1px solid rgba(7, 17, 27, 0.1)
 					top: 0
 					bottom: 0			
+	.notice
+		font-size: 12px
+		color: rgb(7, 17, 27)
+		padding: 0 18px
+		.name
+			font: 
+				size: 14px
+				weight: 400
+			margin: 18px 0 9px	
+		.text
+			padding: 0 12px
+			font-size: 12px
+			color: rgb(240, 20, 20)	
+			line-height: 24px
+			margin-bottom: 16px
+		.discount_wrapper
+			padding: 0 12px	
+	.pics
+		padding: 0 0 0 18px
+		.name
+			font: 
+				size: 14px
+				weight: 400
+			color: rgb(7, 17, 27)
+			margin: 18px 0 9px
+		.pic_wrapper
+			width: 100%
+			overflow: hidden
+			.item_wrapper
+				display: flex
+				width: 504px
+				.item
+					margin-right: 6px
+					&:last-child
+						margin-right: 0
+	.info
+		padding: 0 18px
+		font-size: 12px
+		color: rgb(7, 17, 27)
+		.name
+			font: 
+				size: 14px
+				weight: 400
+			margin: 18px 0 9px
+		.item_wrapper
+			.item
+				height: 48px
+				line-height: 48px
+				padding: 0 12px	
+				border-top: 1px solid rgba(7, 17, 27, 0.1)
 </style>
+

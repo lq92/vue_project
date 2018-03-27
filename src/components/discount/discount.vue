@@ -1,6 +1,6 @@
 <template>
 	<div class='discount'>
-		<ul class='type_wrapper'>
+		<ul class='type_wrapper' :class='category'>
 			<li v-for='(item, index) in supports' class='text'><span class='img' :class='types[supports[index].type]'></span>{{ item.description }}</li>
 		</ul>
 	</div>
@@ -11,6 +11,9 @@ export default {
 	props: {
 		supports: {
 			type: Array
+		},
+		category: {
+			type: String
 		}
 	},
 	data(){
@@ -24,7 +27,7 @@ export default {
 <style lang='sass' scoped>
 @import '../../styles/image'
 .discount 
-	.type_wrapper
+	.overlay
 		.text
 			display: flex
 			align-items: center
@@ -42,6 +45,31 @@ export default {
 				@include image('invoice_2')
 			.guarantee
 				@include image('guarantee_2')
+			.img
+				display: inline-block
+				width: 16px
+				height: 16px
+				margin-right: 6px
+				background-size: 16px 16px
+				background-position: left center
+				background-repeat: no-repeat
+	.seller_page
+		.text
+			display: flex
+			align-items: center
+			height: 49px
+			border-top: 1px solid rgba(7, 17, 27, 0.1)
+			font-size: 12px
+			.decrease
+				@include image('decrease_4')
+			.discount
+				@include image('discount_4')
+			.special
+				@include image('special_4')
+			.invoice
+				@include image('invoice_4')
+			.guarantee
+				@include image('guarantee_4')
 			.img
 				display: inline-block
 				width: 16px
