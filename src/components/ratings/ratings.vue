@@ -28,26 +28,34 @@
 			</div>
 		</div>
 		<gutter></gutter>
-		<div class='container'></div>
+		<div class='container'>
+			<select-btns :ratings='ratings'></select-btns>
+		</div>
 	</div>
 </template>
 
 <script>
 import gutter from '~/gutter/gutter'
 import score from '~/score/score'
+import selectBtns from '~/select_btns/select_btns'
 export default {
 	data(){
 		return {
-			seller: {}
+			seller: {},
+			ratings: []
 		}
 	},
 	components: {
 		gutter,
-		score
+		score,
+		selectBtns
 	},
 	mounted(){
 		this.$http.get('/api/seller').then(res => {
 			this.seller = res.body.seller
+		})
+		this.$http.get('/api/ratings').then(res => {
+			this.ratings = res.body.ratings
 		})
 	}
 }	
