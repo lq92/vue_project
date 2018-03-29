@@ -50,7 +50,7 @@ export default {
 		display: flex
 		justify-content: space-between
 		&.star24
-			width: 100px
+			width: 62px
 			.ON
 				@include image('star24_on')
 			.OFF
