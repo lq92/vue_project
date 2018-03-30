@@ -35,16 +35,9 @@ export default {
 			margin-bottom: 12px
 			&:last-child
 				margin-bottom: 0
-			.decrease
-				@include image('decrease_2')
-			.discount
-				@include image('discount_2')
-			.special
-				@include image('special_2')
-			.invoice
-				@include image('invoice_2')
-			.guarantee
-				@include image('guarantee_2')
+			@each $classname in decrease, discount, special, invoice, guarantee
+				.#{$classname}
+					@include image(#{$classname}_2)	
 			.img
 				display: inline-block
 				width: 16px
@@ -60,16 +53,9 @@ export default {
 			height: 49px
 			border-top: 1px solid rgba(7, 17, 27, 0.1)
 			font-size: 12px
-			.decrease
-				@include image('decrease_4')
-			.discount
-				@include image('discount_4')
-			.special
-				@include image('special_4')
-			.invoice
-				@include image('invoice_4')
-			.guarantee
-				@include image('guarantee_4')
+			@each $classname in decrease, discount, special, invoice, guarantee
+				.#{$classname}
+					@include image(#{$classname}_4)
 			.img
 				display: inline-block
 				width: 16px

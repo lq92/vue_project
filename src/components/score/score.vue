@@ -48,44 +48,19 @@ export default {
 .score
 	.star_wrapper
 		display: flex
-		justify-content: space-between
-		&.star24
-			width: 62px
-			.ON
-				@include image('star24_on')
-			.OFF
-				@include image('star24_off')
-			.HALF
-				@include image('star24_half')
-			.star
-				width: 10px
-				height: 10px
-				background-size: 10px 10px
-				background-repeat: no-repeat
-		&.star36
-			width: 100px
-			.ON
-				@include image('star36_on')
-			.OFF
-				@include image('star36_off')
-			.HALF
-				@include image('star36_half')
-			.star
-				width: 15px
-				height: 15px
-				background-size: 15px 15px
-				background-repeat: no-repeat
-		&.star48
-			width: 184px
-			.ON
-				@include image('star48_on')
-			.OFF
-				@include image('star48_off')
-			.HALF
-				@include image('star48_half')
-			.star
-				width: 20px
-				height: 20px
-				background-size: 20px 20px
-				background-repeat: no-repeat
+		justify-content: space-between	
+@each $star, $star_width, $star_size in ( 24, 62px, 10px), (36, 100px, 15px), (48, 184px, 20px)
+	.star#{$star}
+		width: $star_width
+		.ON
+			@include image(star#{$star}_on)
+		.HALF
+			@include image(star#{$star}_half)
+		.OFF
+			@include image(star#{$star}_off)
+		.star
+			width: $star_size
+			height: $star_size
+			background-size: $star_size $star_size
+			background-repeat: no-repeat
 </style>
