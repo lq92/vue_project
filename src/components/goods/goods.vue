@@ -2,7 +2,7 @@
 	<div class='goods'>
 		<div class='menu_wrapper' ref='menu_wrapper'>
 			<ul class='menu'>
-				<li class='item_wrapper' v-for='item in goods'>
+				<li class='item_wrapper' v-for='(item, index) in goods' :class='{ active: currentIndex === index }'>
 					<div class='item'>
 						<span v-if='item.type >= 0' :class='typeLists[item.type]'></span>
 						<span class='text'>{{ item.name }}</span>
@@ -12,7 +12,7 @@
 		</div>
 		<div class='goods_wrapper' ref='goods_wrapper'>
 			<div class='goods_container'>
-				<div class='food_wrapper' v-for='item in goods'>
+				<div class='food_wrapper' v-for='item in goods' ref='food_wrapper'>
 					<h2 class='title'>{{ item.name }}</h2>
 					<div class='food_list' v-for='food in item.foods'>
 						<div class='icon'>
@@ -37,19 +37,50 @@ export default {
 	data(){
 		return {
 			goods: [],
-			typeLists: [ 'guarantee', 'discount', 'special', 'decrease', 'invoice' ]
+			typeLists: [ 'guarantee', 'discount', 'special', 'decrease', 'invoice' ],
+			listHeight: [],
+			currentIndex: 0
 		}
 	},
 	mounted(){
 		this.$http.get('/api/goods').then(res => {
 			this.goods = res.body.goods
-			new BScroll(this.$refs.menu_wrapper, { click: true })
-			new BScroll(this.$refs.goods_wrapper, { click: true })
+			let menuWrapper = new BScroll(this.$refs.menu_wrapper, { click: true })
+			let goodsWrapper = new BScroll(this.$refs.goods_wrapper, { click: true, probeType: 2 })
+			this.$nextTick(() => {
+				this._calcHeight()
+				goodsWrapper.on('scroll', (pos) => {
+					let y = Math.abs(pos.y)
+					for(let i = 0; i < this.listHeight.length; i++){
+						if(y >= this.listHeight[i] && y <= this.listHeight[i + 1]){
+							this.currentIndex = i;
+						}
+					}
+				})
+				let itemWrapper = this.$refs.menu_wrapper.querySelectorAll('.item_wrapper')
+				itemWrapper.forEach((item, index) => {
+					item.addEventListener('click', () => {
+						this.currentIndex = index
+						console.log(index, this.listHeight[index])
+						goodsWrapper.scrollTo(0, -this.listHeight[index], 400)
+					})
+				})
+			})
 		})
 	},
 	filters: {
 		formatePrice(val){
 			return `￥${val}`
+		}
+	},
+	methods: {
+		_calcHeight(){
+			let height = 0;
+			this.listHeight.push(height)
+			this.$refs.food_wrapper.forEach((item) => {
+				height += item.getBoundingClientRect().height
+				this.listHeight.push(height)
+			})
 		}
 	}
 }	
@@ -65,21 +96,31 @@ export default {
 		overflow: hidden
 		.menu
 			width: 80px
-			padding: 0 12px
 			background: rgb(243, 245, 247)
 			.item_wrapper
 				display: table
 				width: 100%
 				height: 54px
+				padding: 0 12px
 				box-sizing: border-box
 				color: rgb(7, 17, 27)
-				border-bottom: 1px solid rgba(7, 17, 27, 0.1)
-				&:last-child
-					border-bottom: 0
+				&.active
+					height: 55px
+					background: #fff
+					position: relative
+					top: -1px
+					.item
+						border-bottom: 0
+					.text
+						font-weight: 400
 				.item
 					display: table-cell
 					vertical-align: middle
 					font-size: 0
+					border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+				&:last-child
+					.item
+						border-bottom: 0	
 				@each $type in ( guarantee, discount, special, decrease, invoice)
 					.#{$type}
 						@include image(#{$type}_3)
