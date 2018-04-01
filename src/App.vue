@@ -2,9 +2,9 @@
   <div id="app">
     <v-head></v-head>
     <div class='tab'>
-      <router-link to='goods'>商品</router-link>
-      <router-link to='ratings'>评价</router-link>
-      <router-link to='seller'>商家</router-link>
+      <router-link to='/goods'>商品</router-link>
+      <router-link to='/ratings'>评价</router-link>
+      <router-link to='/seller'>商家</router-link>
     </div>
     <router-view :seller='seller' />
   </div>

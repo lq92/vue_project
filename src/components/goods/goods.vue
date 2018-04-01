@@ -28,11 +28,13 @@
 				</div>
 			</div>
 		</div>
+		<cart></cart>
 	</div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
+import cart from '~/cart/cart'
 export default {
 	data(){
 		return {
@@ -82,6 +84,9 @@ export default {
 				this.listHeight.push(height)
 			})
 		}
+	},
+	components: {
+		cart
 	}
 }	
 </script>
@@ -171,28 +176,21 @@ export default {
 					.info
 						flex: 1 1 auto
 						color: rgb(147, 153, 159)	
-						.name
+					@each $name, $size, $weight in (name, 14px, 400), (des, 10px, 400), (sell, 10px, 400), (price, 14px, 700)
+						.#{$name}
 							font: 
-								size: 14px
-								weight: 400
+								size: $size
+								weight: $weight	
+						.name
 							color: rgb(7, 17, 27)
 							margin: 2px 0 9px
 						.des
-							font: 
-								size: 10px
-								weight: 400
 							line-height: 14px	
 						.sell
-							font: 
-								size: 10px
-								weight: 400
 							margin: 8px 0	6px
 							.rating
 								margin-left: 12px
 						.price
-							font: 
-								size: 14px
-								weight: 700
 							color: rgb(240, 20, 20)
 							.old_price
 								font-size: 10px
