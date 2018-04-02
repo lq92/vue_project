@@ -9,7 +9,7 @@
 			<p class='total_price'>{{ totalPrice | formatePrice }}</p>
 			<p class='delivery'>另需配送费{{ seller.deliveryPrice | formatePrice }}元</p>
 		</div>
-		<div class='count'></div>
+		<div class='count'>{{ seller.minPrice | formatePrice }}起送</div>
 	</div>
 </template>
 
@@ -86,4 +86,15 @@ export default {
 			margin-right: 12px	
 		.delivery
 			font-size: 10px		
+	.count
+		flex: 0 0 auto
+		width: 105px
+		height: 100%
+		line-height: 48px
+		text-align: center
+		background: rgb(43, 51, 59)	
+		font: 
+			size: 12px
+			weight: 700
+		color: rgba(255, 255, 255, 0.4)		
 </style>

@@ -23,6 +23,9 @@
 							<h3 class='des'>{{ food.description }}</h3>
 							<h4 class='sell'>月售{{ food.sellCount }}份<span class='rating'>好评率{{ food.rating }}%</span></h4>
 							<p class='price'>{{ food.price | formatePrice }}<span class='old_price' v-if='food.oldPrice'>{{ food.oldPrice | formatePrice }}</span></p>
+							<div class='count_wrapper'>
+								<count-btn></count-btn>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -35,6 +38,7 @@
 <script>
 import BScroll from 'better-scroll'
 import cart from '~/cart/cart'
+import countBtn from '~/count_btn/count_btn'
 export default {
 	data(){
 		return {
@@ -86,7 +90,8 @@ export default {
 		}
 	},
 	components: {
-		cart
+		cart,
+		countBtn
 	}
 }	
 </script>
@@ -163,7 +168,8 @@ export default {
 					display: flex
 					padding: 18px	0
 					margin: 0 18px
-					border-bottom: 1px solid rgb(217, 221, 225)
+					border-bottom: 1px solid rgb(217, 221, 225)	
+					position: relative
 					&:last-child
 						border-bottom: 0
 					.icon
@@ -175,7 +181,7 @@ export default {
 						margin-right: 9px
 					.info
 						flex: 1 1 auto
-						color: rgb(147, 153, 159)	
+						color: rgb(147, 153, 159)
 					@each $name, $size, $weight in (name, 14px, 400), (des, 10px, 400), (sell, 10px, 400), (price, 14px, 700)
 						.#{$name}
 							font: 
@@ -197,4 +203,8 @@ export default {
 								color: rgb(147, 153, 159)
 								text-decoration: line-through
 								margin-left: 8px	
+						.count_wrapper
+							position: absolute	
+							right: 2px
+							bottom: 19px	
 </style>
