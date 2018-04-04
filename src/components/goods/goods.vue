@@ -32,6 +32,7 @@
 			</div>
 		</div>
 		<cart :selected-foods='selectedFoods'></cart>
+		
 	</div>
 </template>
 
