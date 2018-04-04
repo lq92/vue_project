@@ -1,14 +1,33 @@
 <template>
 	<div class='count_btn'>
-		<i class='subtraction icon_remove_circle_outline'></i>
-		<span class='num'>{{ 0 }}</span>
-		<i class='addition icon_add_circle'></i>
+		<transition name='fade'>
+			<i class='subtraction icon_remove_circle_outline' v-show='food.count > 0'></i>
+		</transition>
+		<transition>
+			<span class='num' v-show='food.count > 0'>{{ food.count }}</span>
+		</transition>
+		<i class='addition icon_add_circle' @click='increase'></i>
 	</div>
 </template>
 
 <script>
 export default {
-
+	props: {
+		food: Object
+	},
+	methods: {
+		increase(){
+			if(!this.food.count){
+				this.$set(this.food, 'count', 1)
+			}else{
+				this.food.count++
+			}
+			this.$emit('increasement', this.food)
+		},
+		decrease(){
+			this.food.count--;
+		}
+	}
 }	
 </script>
 
@@ -16,6 +35,10 @@ export default {
 @import '../../assets/style.css'
 .count_btn
 	display: flex
+	position: relative
+	.subtraction
+		position: absolute
+		left: -20px
 	.subtraction, .addition
 		font-size: 20px
 		color: rgb(0, 160, 220)
@@ -29,4 +52,8 @@ export default {
 		font: 
 			size: 10px
 			weight: 400
+	.fade-enter-active, .fade-leave-active
+		transition: all 0.6s
+	.fade-enter, .fade-leave-to
+		left: 0
 </style>

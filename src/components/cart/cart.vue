@@ -2,11 +2,12 @@
 	<div class='cart'>
 		<div class='icon_wrapper'>
 			<div class='icon_inner'>
-					<i class='icon_shopping_cart'></i>
+					<i class='icon_shopping_cart' :class='{active: true}'></i>
+					<div class='count' v-show='totalCount > 0'>{{ totalCount }}</div>
 			</div>
 		</div>
 		<div class='price'>
-			<p class='total_price'>{{ totalPrice | formatePrice }}</p>
+			<p class='total_price' :class='{active: true}'>{{ totalPrice | formatePrice }}</p>
 			<p class='delivery'>另需配送费{{ seller.deliveryPrice | formatePrice }}元</p>
 		</div>
 		<div class='count'>{{ seller.minPrice | formatePrice }}起送</div>
@@ -15,6 +16,9 @@
 
 <script>
 export default {
+	props: {
+		selectedFoods: Array
+	},
 	data(){
 		return {
 			totalPrice: 0,
@@ -25,6 +29,16 @@ export default {
 		this.$http.get('/api/seller').then(res => {
 			this.seller = res.body.seller
 		})
+	},
+	computed: {
+		totalCount(){
+			let count = 0;
+			this.selectedFoods.forEach(item => {
+				count = 0;
+				count += item.count
+			})
+			return count
+		}
 	},
 	filters: {
 		formatePrice(val){
@@ -49,6 +63,7 @@ export default {
 		width: 80px
 		padding: 12px
 		box-sizing: border-box
+		position: relative
 		.icon_inner
 			display: flex
 			justify-content: center
@@ -69,6 +84,24 @@ export default {
 				border-radius: 50%
 				color: rgba(255, 255, 255, 0.4)
 				font-size: 20px
+				&.active
+					background: rgb(0, 160, 220)
+					color: rgb(255, 255, 255)
+			.count
+				position: absolute
+				top: 0
+				right: 0
+				width: 24px
+				height: 16px	
+				color: rgb(255, 255, 255)	
+				font: 
+					size: 9px
+					weight: 700
+				text-align: center
+				line-height: 16px
+				border-radius: 6px
+				box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4)	
+				background: rgb(240, 20, 20)
 	.price
 		flex: 1 1 auto
 		display: flex
@@ -83,7 +116,9 @@ export default {
 			line-height: 24px
 			padding-right: 12px
 			border-right: 1px solid rgba(255, 255, 255, 0.1)	
-			margin-right: 12px	
+			margin-right: 12px
+			&.active
+				color: rgb(255, 255, 255)	
 		.delivery
 			font-size: 10px		
 	.count

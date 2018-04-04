@@ -24,14 +24,14 @@
 							<h4 class='sell'>月售{{ food.sellCount }}份<span class='rating'>好评率{{ food.rating }}%</span></h4>
 							<p class='price'>{{ food.price | formatePrice }}<span class='old_price' v-if='food.oldPrice'>{{ food.oldPrice | formatePrice }}</span></p>
 							<div class='count_wrapper'>
-								<count-btn></count-btn>
+								<count-btn :food='food' @increasement='addition'></count-btn>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<cart></cart>
+		<cart :selected-foods='selectedFoods'></cart>
 	</div>
 </template>
 
@@ -45,7 +45,8 @@ export default {
 			goods: [],
 			typeLists: [ 'guarantee', 'discount', 'special', 'decrease', 'invoice' ],
 			listHeight: [],
-			currentIndex: 0
+			currentIndex: 0,
+			selectedFoods: []
 		}
 	},
 	mounted(){
@@ -74,11 +75,6 @@ export default {
 			})
 		})
 	},
-	filters: {
-		formatePrice(val){
-			return `￥${val}`
-		}
-	},
 	methods: {
 		_calcHeight(){
 			let height = 0;
@@ -87,11 +83,21 @@ export default {
 				height += item.getBoundingClientRect().height
 				this.listHeight.push(height)
 			})
+		},
+		addition(food){
+			if(this.selectedFoods.indexOf(food) === -1){
+				this.selectedFoods.push(food)
+			}
 		}
 	},
 	components: {
 		cart,
 		countBtn
+	},
+	filters: {
+		formatePrice(val){
+			return `￥${val}`
+		}
 	}
 }	
 </script>
