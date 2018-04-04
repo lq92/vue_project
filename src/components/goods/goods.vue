@@ -24,7 +24,7 @@
 							<h4 class='sell'>月售{{ food.sellCount }}份<span class='rating'>好评率{{ food.rating }}%</span></h4>
 							<p class='price'>{{ food.price | formatePrice }}<span class='old_price' v-if='food.oldPrice'>{{ food.oldPrice | formatePrice }}</span></p>
 							<div class='count_wrapper'>
-								<count-btn :food='food' @increasement='addition'></count-btn>
+								<count-btn :food='food'></count-btn>
 							</div>
 						</div>
 					</div>
@@ -45,8 +45,7 @@ export default {
 			goods: [],
 			typeLists: [ 'guarantee', 'discount', 'special', 'decrease', 'invoice' ],
 			listHeight: [],
-			currentIndex: 0,
-			selectedFoods: []
+			currentIndex: 0
 		}
 	},
 	mounted(){
@@ -83,11 +82,26 @@ export default {
 				height += item.getBoundingClientRect().height
 				this.listHeight.push(height)
 			})
+		}
+	},
+	computed: {
+		selectedFoods(){
+			let results = [];
+			this.goods.forEach(item => {
+				item.foods.forEach(food => {
+					if(food.count){
+						results.push(food)
+					}
+				})
+			})
+			return results
 		},
-		addition(food){
-			if(this.selectedFoods.indexOf(food) === -1){
-				this.selectedFoods.push(food)
-			}
+		totalCount(){
+			let count = 0;
+			this.selectedFoods.forEach(item => {
+				count += item.count
+			})
+			return count;
 		}
 	},
 	components: {

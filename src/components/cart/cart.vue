@@ -2,15 +2,15 @@
 	<div class='cart'>
 		<div class='icon_wrapper'>
 			<div class='icon_inner'>
-					<i class='icon_shopping_cart' :class='{active: true}'></i>
+					<i class='icon_shopping_cart' :class='{active: totalCount > 0}'></i>
 					<div class='count' v-show='totalCount > 0'>{{ totalCount }}</div>
 			</div>
 		</div>
 		<div class='price'>
-			<p class='total_price' :class='{active: true}'>{{ totalPrice | formatePrice }}</p>
+			<p class='total_price' :class='{active: totalPrice > 0}'>{{ totalPrice | formatePrice }}</p>
 			<p class='delivery'>另需配送费{{ seller.deliveryPrice | formatePrice }}元</p>
 		</div>
-		<div class='count'>{{ seller.minPrice | formatePrice }}起送</div>
+		<div class='settle' :class='{ active: this.totalPrice > this.seller.minPrice }'>{{ settleBtn }}</div>
 	</div>
 </template>
 
@@ -21,24 +21,38 @@ export default {
 	},
 	data(){
 		return {
-			totalPrice: 0,
 			seller: {}
+		}
+	},
+	computed: {
+		totalCount(){
+			let count = 0;
+			this.selectedFoods.forEach(item => {
+				count += item.count
+			})
+			return count;
+		},
+		totalPrice(){
+			let price = 0;
+			this.selectedFoods.forEach(item => {
+				price += item.count * item.price
+			})
+			return price
+		},
+		settleBtn(){
+			if(this.totalPrice === 0){
+				return `￥20起送`
+			}else if(this.totalPrice < this.seller.minPrice){
+				return `还差${this.seller.minPrice - this.totalPrice}起送`
+			}else{
+				return `去结算`
+			}
 		}
 	},
 	mounted(){
 		this.$http.get('/api/seller').then(res => {
 			this.seller = res.body.seller
 		})
-	},
-	computed: {
-		totalCount(){
-			let count = 0;
-			this.selectedFoods.forEach(item => {
-				count = 0;
-				count += item.count
-			})
-			return count
-		}
 	},
 	filters: {
 		formatePrice(val){
@@ -121,7 +135,7 @@ export default {
 				color: rgb(255, 255, 255)	
 		.delivery
 			font-size: 10px		
-	.count
+	.settle
 		flex: 0 0 auto
 		width: 105px
 		height: 100%
@@ -132,4 +146,7 @@ export default {
 			size: 12px
 			weight: 700
 		color: rgba(255, 255, 255, 0.4)		
+		&.active
+			background: rgb(0, 180, 60)
+			color: rgb(255, 255, 255)
 </style>

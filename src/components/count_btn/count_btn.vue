@@ -1,7 +1,7 @@
 <template>
 	<div class='count_btn'>
 		<transition name='fade'>
-			<i class='subtraction icon_remove_circle_outline' v-show='food.count > 0'></i>
+			<i class='subtraction icon_remove_circle_outline' v-show='food.count > 0' @click='decrease'></i>
 		</transition>
 		<transition>
 			<span class='num' v-show='food.count > 0'>{{ food.count }}</span>
@@ -22,7 +22,6 @@ export default {
 			}else{
 				this.food.count++
 			}
-			this.$emit('increasement', this.food)
 		},
 		decrease(){
 			this.food.count--;
