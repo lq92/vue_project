@@ -31,8 +31,7 @@
 				</div>
 			</div>
 		</div>
-		<cart :selected-foods='selectedFoods'></cart>
-		
+		<cart :selected-foods='selectedFoods' @clearFoods='clear'></cart>
 	</div>
 </template>
 
@@ -41,9 +40,14 @@ import BScroll from 'better-scroll'
 import cart from '~/cart/cart'
 import countBtn from '~/count_btn/count_btn'
 export default {
+	props: {
+		goods: Array,
+		default: () => {
+			return [];
+		}
+	},
 	data(){
 		return {
-			goods: [],
 			typeLists: [ 'guarantee', 'discount', 'special', 'decrease', 'invoice' ],
 			listHeight: [],
 			currentIndex: 0
@@ -51,7 +55,7 @@ export default {
 	},
 	mounted(){
 		this.$http.get('/api/goods').then(res => {
-			this.goods = res.body.goods
+			//this.goods = res.body.goods
 			let menuWrapper = new BScroll(this.$refs.menu_wrapper, { click: true })
 			let goodsWrapper = new BScroll(this.$refs.goods_wrapper, { click: true, probeType: 2 })
 			this.$nextTick(() => {
@@ -83,6 +87,9 @@ export default {
 				height += item.getBoundingClientRect().height
 				this.listHeight.push(height)
 			})
+		},
+		clear(){
+			this.selectedFoods = []
 		}
 	},
 	computed: {

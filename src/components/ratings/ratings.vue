@@ -61,11 +61,9 @@ import score from '~/score/score'
 import selectBtns from '~/select_btns/select_btns'
 import BScroll from 'better-scroll'
 export default {
-	data(){
-		return {
-			seller: {},
-			ratings: []
-		}
+	props: {
+		seller: Object,
+		ratings: Array
 	},
 	components: {
 		gutter,
@@ -73,12 +71,6 @@ export default {
 		selectBtns
 	},
 	mounted(){
-		this.$http.get('/api/seller').then(res => {
-			this.seller = res.body.seller
-		})
-		this.$http.get('/api/ratings').then(res => {
-			this.ratings = res.body.ratings
-		})
 		new BScroll(this.$refs.ratings_wrapper, {})
 	}
 }	

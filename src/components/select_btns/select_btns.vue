@@ -24,24 +24,21 @@ export default {
 					negative: '不满意'
 				}
 			}
-		}
+		},
+		ratings: Array
 	},
 	data(){
 		return {
-			ratings: [],
 			positive: [],
 			negative: []
 		}
 	},
 	mounted(){
-		this.$http.get('/api/ratings').then(res => {
-			this.ratings = res.body.ratings;
-			this.positive = this.ratings.filter(item => {
-				return item.rateType === 0;
-			})
-			this.negative = this.ratings.filter(item => {
-				return item.rateType === 1;
-			})
+		this.positive = this.ratings.filter(item => {
+			return item.rateType === 0;
+		})
+		this.negative = this.ratings.filter(item => {
+			return item.rateType === 1;
 		})
 	},
 	computed: {

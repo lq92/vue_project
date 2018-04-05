@@ -72,9 +72,11 @@ import gutter from '~/gutter/gutter'
 import score from '~/score/score'
 import discount from '~/discount/discount'
 export default {
+	props: {
+		seller: Object
+	},
 	data(){
 		return {
-			seller: {},
 			seller_page: 'seller_page',
 			collection: JSON.parse(localStorage.getItem('collection'))
 		}
@@ -85,9 +87,6 @@ export default {
 		discount
 	},
 	mounted(){
-		this.$http.get('/api/seller').then(res => {
-			this.seller = res.body.seller
-		})
 		this.$nextTick(() => {
 			new BScroll(this.$refs.pic_wrapper, { scrollX: true })
 			new BScroll(this.$refs.seller_wrapper, { click: true })

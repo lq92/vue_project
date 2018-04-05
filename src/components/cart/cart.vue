@@ -1,27 +1,52 @@
 <template>
-	<div class='cart'>
-		<div class='icon_wrapper'>
-			<div class='icon_inner'>
-					<i class='icon_shopping_cart' :class='{active: totalCount > 0}'></i>
-					<div class='count' v-show='totalCount > 0'>{{ totalCount }}</div>
+	<div>
+		<div class='cart'>
+			<div class='icon_wrapper' @click='toggle'>
+				<div class='icon_inner'>
+						<i class='icon_shopping_cart' :class='{active: totalCount > 0}'></i>
+						<div class='count' v-show='totalCount > 0'>{{ totalCount }}</div>
+				</div>
+			</div>
+			<div class='price' @click='toggle'>
+				<p class='total_price' :class='{active: totalPrice > 0}'>{{ totalPrice | formatePrice }}</p>
+				<p class='delivery'>另需配送费{{ seller.deliveryPrice | formatePrice }}元</p>
+			</div>
+			<div class='settle' :class='{ active: this.totalPrice >= this.seller.minPrice }'>{{ settleBtn }}</div>
+		</div>
+		<div class='cart_info' v-show='isShow'>
+			<div class='cart_info_wrapper'>
+				<header>
+					<span class='title'>购物车</span>
+					<span class='clear' @click='clear'>清空</span>
+				</header>
+				<main ref='content_hook'>
+					<div class='content'>
+						<div class='item_wrapper' v-for='item in selectedFoods'>
+							<p class='name'>{{ item.name }}</p>
+							<p class='price'>{{ item.price | formatePrice }}</p>
+							<div class='count_btn_wrapper'>
+								<count-btn :food='item'></count-btn>
+							</div>
+						</div>
+					</div>	
+				</main>
 			</div>
 		</div>
-		<div class='price'>
-			<p class='total_price' :class='{active: totalPrice > 0}'>{{ totalPrice | formatePrice }}</p>
-			<p class='delivery'>另需配送费{{ seller.deliveryPrice | formatePrice }}元</p>
-		</div>
-		<div class='settle' :class='{ active: this.totalPrice > this.seller.minPrice }'>{{ settleBtn }}</div>
-	</div>
+		<div class='mask' v-show='isShow' @click='toggle'></div>
+	</div>	
 </template>
 
 <script>
+import countBtn from '~/count_btn/count_btn'
+import BScroll from 'better-scroll'
 export default {
 	props: {
 		selectedFoods: Array
 	},
 	data(){
 		return {
-			seller: {}
+			seller: {},
+			isShow: false
 		}
 	},
 	computed: {
@@ -43,7 +68,7 @@ export default {
 			if(this.totalPrice === 0){
 				return `￥20起送`
 			}else if(this.totalPrice < this.seller.minPrice){
-				return `还差${this.seller.minPrice - this.totalPrice}起送`
+				return `还差￥${this.seller.minPrice - this.totalPrice}起送`
 			}else{
 				return `去结算`
 			}
@@ -54,10 +79,24 @@ export default {
 			this.seller = res.body.seller
 		})
 	},
+	methods: {
+		toggle(){
+			if(this.selectedFoods){
+				this.isShow = !this.isShow
+				new BScroll(this.$refs.content_hook, { click: true })
+			}
+		},
+		clear(){
+			this.$emit('clearFoods')
+		}
+	},
 	filters: {
 		formatePrice(val){
 			return `￥${val}`
 		}
+	},
+	components: {
+		countBtn
 	}
 }	
 </script>
@@ -71,6 +110,7 @@ export default {
 	position: fixed
 	bottom: 0
 	left: 0
+	z-index: 50
 	background: rgba(7, 17, 27, 0.95)
 	.icon_wrapper
 		flex: 0 0 auto
@@ -149,4 +189,67 @@ export default {
 		&.active
 			background: rgb(0, 180, 60)
 			color: rgb(255, 255, 255)
+.cart_info	
+	position: absolute
+	left: 0
+	bottom: 48px
+	max-height: 235px
+	width: 100%
+	background: rgb(255, 255, 255)
+	padding-bottom: 22px
+	z-index: 45
+	overflow: hidden
+	.cart_info_wrapper
+		header
+			display: flex
+			align-items: center
+			justify-content: space-between
+			width: 100%
+			padding: 0 18px
+			height: 40px
+			background: rgb(243, 245, 247)
+			border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+			box-sizing: border-box
+			.title
+				font-size: 14px
+				color: rgb(7, 17, 27)
+			.clear
+				font: 
+					size: 12px
+					weight: 400
+				color: rgb(0, 160, 220)	
+		main
+			display: flex
+			flex-direction: column
+			height: 195px
+			overflow: hidden
+			.item_wrapper
+				display: flex
+				justify-content: space-between	
+				align-items: center
+				margin: 0 18px
+				height: 48px
+				border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+				font: 
+					size: 14px
+					weight: 400
+				color: rgb(7, 17, 27)	
+				position: relative
+				.price	
+					font-weight: 700
+					color: rgb(240, 20, 20)
+					margin-right: 85px
+				.count_btn_wrapper
+					position: absolute
+					right: 2px	
+.mask
+	position: fixed
+	top: 0
+	left: 0
+	width: 100%
+	height: 100%
+	background: rgba(7, 17, 27, 0.6)		
+	z-index: 40  
+	backdrop-filter: blur(10px)
+	overflow: hidden			
 </style>
