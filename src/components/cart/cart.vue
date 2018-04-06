@@ -221,7 +221,7 @@ export default {
 		main
 			display: flex
 			flex-direction: column
-			height: 195px
+			max-height: 195px
 			overflow: hidden
 			.item_wrapper
 				display: flex

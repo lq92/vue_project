@@ -27,6 +27,9 @@
 								<count-btn :food='food'></count-btn>
 							</div>
 						</div>
+						<div class='wrapper'>
+							<food :food='food'></food>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -39,6 +42,7 @@
 import BScroll from 'better-scroll'
 import cart from '~/cart/cart'
 import countBtn from '~/count_btn/count_btn'
+import food from '~/food/food'
 export default {
 	props: {
 		goods: Array,
@@ -72,7 +76,6 @@ export default {
 				itemWrapper.forEach((item, index) => {
 					item.addEventListener('click', () => {
 						this.currentIndex = index
-						console.log(index, this.listHeight[index])
 						goodsWrapper.scrollTo(0, -this.listHeight[index], 400)
 					})
 				})
@@ -114,7 +117,8 @@ export default {
 	},
 	components: {
 		cart,
-		countBtn
+		countBtn,
+		food
 	},
 	filters: {
 		formatePrice(val){
@@ -235,4 +239,6 @@ export default {
 							position: absolute	
 							right: 2px
 							bottom: 19px	
+					.wrapper
+						position: relative		
 </style>
