@@ -25,7 +25,12 @@ export default {
 				}
 			}
 		},
-		ratings: Array
+		ratings: {
+			type: Array,
+			default: () => {
+				return []
+			}
+		}
 	},
 	data(){
 		return {

@@ -14,7 +14,7 @@
 			<div class='goods_container'>
 				<div class='food_wrapper' v-for='item in goods' ref='food_wrapper'>
 					<h2 class='title'>{{ item.name }}</h2>
-					<div class='food_list' v-for='food in item.foods'>
+					<div class='food_list' v-for='food in item.foods' @click='clickFood(food)'>
 						<div class='icon'>
 							<img width='57' height='57' :src='food.icon'>
 						</div>
@@ -27,14 +27,12 @@
 								<count-btn :food='food'></count-btn>
 							</div>
 						</div>
-						<div class='wrapper'>
-							<food :food='food'></food>
-						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<cart :selected-foods='selectedFoods' @clearFoods='clear'></cart>
+		<food :food='food' :is-show='isShow'></food>
 	</div>
 </template>
 
@@ -54,7 +52,9 @@ export default {
 		return {
 			typeLists: [ 'guarantee', 'discount', 'special', 'decrease', 'invoice' ],
 			listHeight: [],
-			currentIndex: 0
+			currentIndex: 0,
+			food: {},
+			isShow: false
 		}
 	},
 	mounted(){
@@ -93,6 +93,11 @@ export default {
 		},
 		clear(){
 			this.selectedFoods = []
+		},
+		clickFood(food){
+			this.food = food;
+			this.isShow = true;
+			console.log(this.food)
 		}
 	},
 	computed: {
@@ -238,7 +243,5 @@ export default {
 						.count_wrapper
 							position: absolute	
 							right: 2px
-							bottom: 19px	
-					.wrapper
-						position: relative		
+							bottom: 19px		
 </style>
