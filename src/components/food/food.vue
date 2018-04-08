@@ -17,9 +17,9 @@
 			</div>
 			<gutter />
 			<div class='ratings'>
-				<select-btns :ratings='food.ratings' v-show='food'></select-btns>
+				<select-btns :ratings='food.ratings' v-show='food' :description='description' :select-type='selectType' :only-content='onlyContent' @selectRatings='selectRatings' @onlyContent='toggle'></select-btns>
 			</div>
-			<div class='back'>
+			<div class='back' @click='hide'>
 				<i class='icon_arrow_lift'></i>
 			</div>
 		</div>
@@ -27,10 +27,24 @@
 </template>
 
 <script>
+const ALL = 2;
+const POSITIVE = 0;
+const NEGATIVE = 1;
 import BScroll from 'better-scroll'
 import gutter from '~/gutter/gutter'
 import selectBtns from '~/select_btns/select_btns'
 export default {
+  data(){
+    return {
+      description: {
+        all: '全部',
+        positive: '推荐',
+        negative: '吐槽'
+      },
+      selectType: ALL,
+      onlyContent: false
+    }
+  },
 	props: {
 		food: Object,
 		isShow: {
@@ -38,6 +52,17 @@ export default {
 			default: false
 		}
 	},
+  methods: {
+    hide(){
+      this.$emit('hide')
+    },
+    selectRatings(type){
+      this.selectType = type
+    },
+    toggle(){
+      this.onlyContent = !this.onlyContent
+    }
+  },
 	filters: {
 		formatePrice(val){
 			return `￥${val}`

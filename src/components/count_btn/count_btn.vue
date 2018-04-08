@@ -1,12 +1,10 @@
 <template>
 	<div class='count_btn'>
 		<transition name='fade'>
-			<i class='subtraction icon_remove_circle_outline' v-show='food.count > 0' @click='decrease'></i>
+			<i class='subtraction icon_remove_circle_outline' v-show='food.count > 0' @click.stop='decrease'></i>
 		</transition>
-		<transition>
-			<span class='num' v-show='food.count > 0'>{{ food.count }}</span>
-		</transition>
-		<i class='addition icon_add_circle' @click='increase'></i>
+		<span class='num' v-show='food.count > 0' @click.stop>{{ food.count }}</span>
+		<i class='addition icon_add_circle' @click.stop='increase'></i>
 	</div>
 </template>
 

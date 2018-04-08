@@ -30,9 +30,9 @@
 			</div>
 			<gutter></gutter>
 			<div class='container'>
-				<select-btns :ratings='ratings'></select-btns>
+				<select-btns :ratings='ratings' :select-type='selectType' :only-content='onlyContent' @selectRatings='select' @onlyContent='toggle'></select-btns>
 				<div class='ratings_wrapper'>
-					<div class='ratings_item' v-for='item in ratings'>
+					<div class='ratings_item' v-for='item in ratings' v-show='selectRating(item)'>
 						<div class='avatar_wrapper'>
 							<img class='avatar' :src='item.avatar'>
 						</div>
@@ -56,11 +56,20 @@
 </template>
 
 <script>
+const ALL = 2;
+const POSITIVE = 0;
+const NEGATIVE = 1;
 import gutter from '~/gutter/gutter'
 import score from '~/score/score'
 import selectBtns from '~/select_btns/select_btns'
 import BScroll from 'better-scroll'
 export default {
+	data(){
+		return {
+			selectType: ALL,
+			onlyContent: false
+		}
+	},
 	props: {
 		seller: Object,
 		ratings: Array
@@ -71,7 +80,25 @@ export default {
 		selectBtns
 	},
 	mounted(){
-		new BScroll(this.$refs.ratings_wrapper, {})
+		new BScroll(this.$refs.ratings_wrapper, { click: true })
+	},
+	methods: {
+		select(type){
+			this.selectType = type;
+		},
+		toggle(){
+			this.onlyContent = !this.onlyContent
+		},
+		selectRating(item){
+			if(this.onlyContent && !item.text){
+				return false;
+			}
+			if(this.selectType === ALL){
+				return true;
+			}else{
+				return this.selectType === item.rateType
+			}
+		}
 	}
 }	
 </script>

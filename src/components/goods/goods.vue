@@ -32,7 +32,7 @@
 			</div>
 		</div>
 		<cart :selected-foods='selectedFoods' @clearFoods='clear'></cart>
-		<food :food='food' :is-show='isShow'></food>
+		<food :food='food' :is-show='isShow' @hide='hide'></food>
 	</div>
 </template>
 
@@ -59,7 +59,6 @@ export default {
 	},
 	mounted(){
 		this.$http.get('/api/goods').then(res => {
-			//this.goods = res.body.goods
 			let menuWrapper = new BScroll(this.$refs.menu_wrapper, { click: true })
 			let goodsWrapper = new BScroll(this.$refs.goods_wrapper, { click: true, probeType: 2 })
 			this.$nextTick(() => {
@@ -97,7 +96,9 @@ export default {
 		clickFood(food){
 			this.food = food;
 			this.isShow = true;
-			console.log(this.food)
+		},
+		hide(){
+			this.isShow = false;
 		}
 	},
 	computed: {
