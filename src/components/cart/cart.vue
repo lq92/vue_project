@@ -41,11 +41,21 @@ import countBtn from '~/count_btn/count_btn'
 import BScroll from 'better-scroll'
 export default {
 	props: {
-		selectedFoods: Array
+		selectedFoods: {
+			type: Array,
+			default(){
+				return []
+			}
+		},
+		seller: {
+			type: Object,
+			default(){
+				return {}
+			}
+		}
 	},
 	data(){
 		return {
-			seller: {},
 			isShow: false
 		}
 	},
@@ -73,11 +83,6 @@ export default {
 				return `去结算`
 			}
 		}
-	},
-	mounted(){
-		this.$http.get('/api/seller').then(res => {
-			this.seller = res.body.seller
-		})
 	},
 	methods: {
 		toggle(){

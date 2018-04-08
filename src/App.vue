@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-head></v-head>
+    <v-head :seller='seller'></v-head>
     <div class='tab'>
       <router-link to='/goods'>商品</router-link>
       <router-link to='/ratings'>评价</router-link>
@@ -26,13 +26,14 @@ export default {
     vHead
   },
   created(){
-    this.$http.get('/api').then(res => {
-      if(res.body.ERR_NO === ERR_NO){
-        let apiData = res.body.apiData;
-        this.seller = apiData.seller;
-        this.goods = apiData.goods;
-        this.ratings = apiData.ratings;
-      }
+    this.$http.get('/api/goods').then(res => {
+      this.goods = res.body.goods;
+    })
+    this.$http.get('/api/ratings').then(res => {
+      this.ratings = res.body.ratings;
+    })
+    this.$http.get('/api/seller').then(res => {
+      this.seller = res.body.seller;
     })
   }
 }

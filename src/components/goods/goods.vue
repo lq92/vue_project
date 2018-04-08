@@ -31,7 +31,7 @@
 				</div>
 			</div>
 		</div>
-		<cart :selected-foods='selectedFoods' @clearFoods='clear'></cart>
+		<cart :selected-foods='selectedFoods' :seller='seller' @clearFoods='clear'></cart>
 		<food :food='food' :is-show='isShow' @hide='hide'></food>
 	</div>
 </template>
@@ -43,7 +43,18 @@ import countBtn from '~/count_btn/count_btn'
 import food from '~/food/food'
 export default {
 	props: {
-		goods: Array,
+		goods: {
+			type: Array,
+			default(){
+				return []
+			}
+		},
+		seller: {
+			type: Object,
+			default(){
+				return {}
+			}
+		},
 		default: () => {
 			return [];
 		}
@@ -58,25 +69,23 @@ export default {
 		}
 	},
 	mounted(){
-		this.$http.get('/api/goods').then(res => {
-			let menuWrapper = new BScroll(this.$refs.menu_wrapper, { click: true })
-			let goodsWrapper = new BScroll(this.$refs.goods_wrapper, { click: true, probeType: 2 })
-			this.$nextTick(() => {
-				this._calcHeight()
-				goodsWrapper.on('scroll', (pos) => {
-					let y = Math.abs(pos.y)
-					for(let i = 0; i < this.listHeight.length; i++){
-						if(y >= this.listHeight[i] && y <= this.listHeight[i + 1]){
-							this.currentIndex = i;
-						}
+		let menuWrapper = new BScroll(this.$refs.menu_wrapper, { click: true })
+		let goodsWrapper = new BScroll(this.$refs.goods_wrapper, { click: true, probeType: 2 })
+		this.$nextTick(() => {
+			this._calcHeight()
+			goodsWrapper.on('scroll', (pos) => {
+				let y = Math.abs(pos.y)
+				for(let i = 0; i < this.listHeight.length; i++){
+					if(y >= this.listHeight[i] && y <= this.listHeight[i + 1]){
+						this.currentIndex = i;
 					}
-				})
-				let itemWrapper = this.$refs.menu_wrapper.querySelectorAll('.item_wrapper')
-				itemWrapper.forEach((item, index) => {
-					item.addEventListener('click', () => {
-						this.currentIndex = index
-						goodsWrapper.scrollTo(0, -this.listHeight[index], 400)
-					})
+				}
+			})
+			let itemWrapper = this.$refs.menu_wrapper.querySelectorAll('.item_wrapper')
+			itemWrapper.forEach((item, index) => {
+				item.addEventListener('click', () => {
+					this.currentIndex = index
+					goodsWrapper.scrollTo(0, -this.listHeight[index], 400)
 				})
 			})
 		})

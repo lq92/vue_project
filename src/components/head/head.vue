@@ -33,14 +33,18 @@ import overlay from '~/overlay/overlay'
 export default {
 	data(){
 		return {
-			seller: {},
 			overlayShow: false
 		}
 	},
-	created(){
-		this.$http.get('/api/seller').then(res => {
-      this.seller = res.body.seller
-    })
+	props: {
+		seller: {
+			type: Object,
+			default(){
+				return {
+					avatar: ''
+				}
+			}
+		}
 	},
 	components: {
 		overlay

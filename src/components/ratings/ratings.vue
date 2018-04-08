@@ -71,8 +71,18 @@ export default {
 		}
 	},
 	props: {
-		seller: Object,
-		ratings: Array
+		seller: {
+			type: Object,
+			default(){
+				return {}
+			}
+		},
+		ratings: {
+			type: Array,
+			default(){
+				return []
+			}
+		}
 	},
 	components: {
 		gutter,
