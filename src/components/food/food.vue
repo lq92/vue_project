@@ -16,9 +16,18 @@
 				<p class='text'>{{ food.info }}</p>
 			</div>
 			<gutter />
-			<div class='ratings'>
+			<div class='ratings' v-if='food.ratings'>
 				<select-btns :ratings='food.ratings' v-show='food' :description='description' :select-type='selectType' :only-content='onlyContent' @selectRatings='selectRatings' @onlyContent='toggle'></select-btns>
+        <div class='item' v-for='item in food.ratings' v-show='select(item)' v-if='food.ratings.length > 0'>
+          <span class='time'>{{ item.rateTime }}</span>
+          <p class='text'><i class='rate_type' :class='{icon_thumb_up: item.rateType === 0, icon_thumb_down: item.rateType === 1}'></i>{{ item.text }}</p>
+          <div class='user'>
+            <span class='user_name'>{{ item.username }}</span>
+            <img class='avatar' :src='item.avatar'>
+          </div>
+        </div>
 			</div>
+      <div class='no_ratings' v-else><h2>暂无评价</h2></div>
 			<div class='back' @click='hide'>
 				<i class='icon_arrow_lift'></i>
 			</div>
@@ -61,6 +70,16 @@ export default {
     },
     toggle(){
       this.onlyContent = !this.onlyContent
+    },
+    select(item){
+      if(this.onlyContent && !item.text){
+        return false
+      }
+      if(this.selectType === ALL){
+        return true
+      }else{
+        return this.selectType === item.rateType
+      }
     }
   },
 	filters: {
@@ -154,4 +173,54 @@ export default {
   		.icon_arrow_lift
   			font-size: 20px
   			color: rgb(255, 255, 255)		
+  .ratings
+    .item
+      display: flex
+      flex-direction: column
+      padding: 16px 0 18px
+      margin: 0 18px  
+      position: relative
+      border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+      .time
+        font: 
+          size: 10px
+          weight: 400
+        color: rgb(147, 153, 159)  
+      .text
+        display: flex
+        align-items: center
+        font: 
+          size: 12px
+          weight: 400
+        color: rgb(7, 17, 27) 
+        margin-top: 11px
+        line-height: 14px
+        .rate_type
+          font-size: 20px
+          margin-right: 4px
+          &.icon_thumb_down
+            color: rgb(183, 187, 191)
+          &.icon_thumb_up
+            color: rgb(0, 160, 220)
+      .user
+        display: flex
+        align-items: center
+        position: absolute  
+        top: 16px
+        right: 18px
+        font: 
+          size: 10px
+          weight: 400
+        color: rgb(147, 153, 159) 
+        .user_name
+          margin-right: 7px
+        .avatar
+          width: 12px
+          height: 12px
+          border-radius: 50%  
+  .no_ratings
+    font-size: 20px
+    color: rgba(7, 17, 27, 0.8)   
+    text-align: center
+    padding: 20px 0   
 </style>
