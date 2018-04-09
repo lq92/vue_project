@@ -6,7 +6,11 @@
       <router-link to='/ratings'>评价</router-link>
       <router-link to='/seller'>商家</router-link>
     </div>
-    <router-view :seller='seller' :goods='goods' :ratings='ratings' />
+    <transition name='switch-direction'>
+      <keep-alive>
+        <router-view :seller='seller' :goods='goods' :ratings='ratings' />
+      </keep-alive>
+    </transition>
   </div>
 </template>
 
@@ -55,4 +59,8 @@ export default {
       color: #4d555d
       &.router-link-active
         color: #f00
+  .switch-direction-enter, .switch-direction-leave-to
+    transform: translateX(-100%)
+  .switch-direction-leave-active, .switch-direction-enter-active
+    transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0)
 </style>

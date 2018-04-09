@@ -1,66 +1,68 @@
 <template>
 	<div class='seller' ref='seller_wrapper'>
 		<div class='container'>
-			<div class='description'>
-				<div class='name_wrapper'>
-					<div class='section_left'>
-						<h2 class='name'>{{ seller.name }}</h2>
-						<div class='score_wrapper'>
-							<score :size='36' :score='seller.score'></score>
-							<span class='rating_count'>({{ seller.ratingCount }})</span>
-							<span class='sell_count'>月售{{ seller.sellCount }}单</span>
+			<div class='test' v-if='seller !== null'>
+				<div class='description'>
+					<div class='name_wrapper'>
+						<div class='section_left'>
+							<h2 class='name'>{{ seller.name }}</h2>
+							<div class='score_wrapper'>
+								<score :size='36' :score='seller.score'></score>
+								<span class='rating_count'>({{ seller.ratingCount }})</span>
+								<span class='sell_count'>月售{{ seller.sellCount }}单</span>
+							</div>
+						</div>
+						<div class='section_right' @click='collect'>
+							<div v-if='collection' class='favorite'>
+								<i class='icon_favorite icon_active'></i>
+								<span class='text_active text'>已收藏</span>
+							</div>
+							<div v-else class='favorite'>
+								<i class='icon_favorite'></i>
+								<span class='text'>收藏</span>
+							</div>
 						</div>
 					</div>
-					<div class='section_right' @click='collect'>
-						<div v-if='collection' class='favorite'>
-							<i class='icon_favorite icon_active'></i>
-							<span class='text_active text'>已收藏</span>
+					<div class='bottom_wrapper'>
+						<div class='min_price'>
+							<p>起送价</p>
+							<p class='item'><span class='item_inner'>{{ seller.minPrice }}</span>元</p>
 						</div>
-						<div v-else class='favorite'>
-							<i class='icon_favorite'></i>
-							<span class='text'>收藏</span>
+						<div class='delivery_price'>
+							<p>商家配送</p>
+							<p class='item'><span class='item_inner'>{{ seller.deliveryPrice }}</span>元</p>
+						</div>
+						<div class='delivery_time'>
+							<p>平均配送时间</p>
+							<p class='item'><span class='item_inner'>{{ seller.deliveryTime }}</span>分钟</p>
 						</div>
 					</div>
 				</div>
-				<div class='bottom_wrapper'>
-					<div class='min_price'>
-						<p>起送价</p>
-						<p class='item'><span class='item_inner'>{{ seller.minPrice }}</span>元</p>
-					</div>
-					<div class='delivery_price'>
-						<p>商家配送</p>
-						<p class='item'><span class='item_inner'>{{ seller.deliveryPrice }}</span>元</p>
-					</div>
-					<div class='delivery_time'>
-						<p>平均配送时间</p>
-						<p class='item'><span class='item_inner'>{{ seller.deliveryTime }}</span>分钟</p>
+				<gutter></gutter>
+				<div class='notice'>
+					<h2 class='name'>公告与活动</h2>
+					<p class='text'>{{ seller.bulletin }}</p>
+					<div class='discount_wrapper'>
+						<discount :supports='seller.supports' :category='seller_page'></discount>
 					</div>
 				</div>
-			</div>
-			<gutter></gutter>
-			<div class='notice'>
-				<h2 class='name'>公告与活动</h2>
-				<p class='text'>{{ seller.bulletin }}</p>
-				<div class='discount_wrapper'>
-					<discount :supports='seller.supports' :category='seller_page'></discount>
-				</div>
-			</div>
-			<gutter></gutter>
-			<div class='pics'>
-				<h2 class='name'>商家实景</h2>
-				<div class='pic_wrapper' ref='pic_wrapper'>
-					<div class='item_wrapper'>
-						<img v-for='item in seller.pics' class='item' :src='item' width='120' height='90'>
+				<gutter></gutter>
+				<div class='pics'>
+					<h2 class='name'>商家实景</h2>
+					<div class='pic_wrapper' ref='pic_wrapper'>
+						<div class='item_wrapper'>
+							<img v-for='item in seller.pics' class='item' :src='item' width='120' height='90'>
+						</div>
 					</div>
 				</div>
-			</div>
-			<gutter></gutter>
-			<div class='info'>
-				<h2 class='name'>商家信息</h2>
-				<ul class='item_wrapper'>
-					<li v-for='item in seller.infos' class='item'>{{ item }}</li>
-				</ul>
-			</div>
+				<gutter></gutter>
+				<div class='info'>
+					<h2 class='name'>商家信息</h2>
+					<ul class='item_wrapper'>
+						<li v-for='item in seller.infos' class='item'>{{ item }}</li>
+					</ul>
+				</div>
+			</div>	
 		</div>	
 	</div>
 </template>
@@ -78,7 +80,8 @@ export default {
 	data(){
 		return {
 			seller_page: 'seller_page',
-			collection: JSON.parse(localStorage.getItem('collection'))
+			collection: JSON.parse(localStorage.getItem('collection')),
+			sellerCopy: {}
 		}
 	},
 	components: {
@@ -86,10 +89,9 @@ export default {
 		score,
 		discount
 	},
-	mounted(){
+	updated() {
 		this.$nextTick(() => {
-			new BScroll(this.$refs.pic_wrapper, { scrollX: true })
-			new BScroll(this.$refs.seller_wrapper, { click: true })
+			this._initScroll()
 		})
 	},	
 	methods: {
@@ -99,6 +101,10 @@ export default {
 		},
 		_collection(){
 			return !!JSON.parse(localStorage.getItem('collection'));
+		},
+		_initScroll(){
+			new BScroll(this.$refs.pic_wrapper, { scrollX: true }).refresh()
+			new BScroll(this.$refs.seller_wrapper, { click: true }).refresh()
 		}
 	}
 }	
@@ -189,7 +195,7 @@ export default {
 		.discount_wrapper
 			padding: 0 12px	
 	.pics
-		padding: 0 0 0 18px
+		padding: 0 0 18px 18px
 		.name
 			font: 
 				size: 14px

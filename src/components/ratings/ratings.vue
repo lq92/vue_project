@@ -1,7 +1,7 @@
 <template>
 	<div class='ratings' ref='ratings_wrapper'>
 		<div class='container_wrapper'>
-			<div class='section_top'>
+			<div class='section_top' v-if='ratings !== null && seller !== null'>
 				<div class='comprehensive'>
 					<h2 class='score'>{{ seller.score }}</h2>
 					<h3 class='text'>综合评分</h3>
@@ -90,7 +90,9 @@ export default {
 		selectBtns
 	},
 	mounted(){
-		new BScroll(this.$refs.ratings_wrapper, { click: true })
+		this.$nextTick(() => {
+			new BScroll(this.$refs.ratings_wrapper, { click: true })
+		})
 	},
 	methods: {
 		select(type){
