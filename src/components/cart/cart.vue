@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class='cart'>
+		<div class='cart' v-if='seller !== null'>
 			<div class='icon_wrapper' @click='toggle'>
 				<div class='icon_inner'>
 						<i class='icon_shopping_cart' :class='{active: totalCount > 0}'></i>

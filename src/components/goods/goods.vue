@@ -2,7 +2,7 @@
 	<div class='goods'>
 		<div class='menu_wrapper' ref='menu_wrapper'>
 			<ul class='menu'>
-				<li class='item_wrapper' v-for='(item, index) in goods' :class='{ active: currentIndex === index }'>
+				<li class='item_wrapper' v-for='(item, index) in goods' :class='{ active: currentIndex === index }' ref='item_wrapper'>
 					<div class='item'>
 						<span v-if='item.type >= 0' :class='typeLists[item.type]'></span>
 						<span class='text'>{{ item.name }}</span>
@@ -43,12 +43,6 @@ import countBtn from '~/count_btn/count_btn'
 import food from '~/food/food'
 export default {
 	props: {
-		goods: {
-			type: Array,
-			default(){
-				return []
-			}
-		},
 		seller: {
 			type: Object,
 			default(){
@@ -61,6 +55,7 @@ export default {
 	},
 	data(){
 		return {
+			goods: [],
 			typeLists: [ 'guarantee', 'discount', 'special', 'decrease', 'invoice' ],
 			listHeight: [],
 			currentIndex: 0,
@@ -69,23 +64,26 @@ export default {
 		}
 	},
 	mounted(){
-		let menuWrapper = new BScroll(this.$refs.menu_wrapper, { click: true })
-		let goodsWrapper = new BScroll(this.$refs.goods_wrapper, { click: true, probeType: 2 })
-		this.$nextTick(() => {
-			this._calcHeight()
-			goodsWrapper.on('scroll', (pos) => {
-				let y = Math.abs(pos.y)
-				for(let i = 0; i < this.listHeight.length; i++){
-					if(y >= this.listHeight[i] && y <= this.listHeight[i + 1]){
-						this.currentIndex = i;
+		this.$http.get('/api/goods').then(res => {
+			this.goods = res.body.goods
+			this.$nextTick(() => {
+				let menuWrapper = new BScroll(this.$refs.menu_wrapper, { click: true })
+				let goodsWrapper = new BScroll(this.$refs.goods_wrapper, { click: true, probeType: 2 })
+				this._calcHeight()
+				goodsWrapper.on('scroll', (pos) => {
+					let y = Math.abs(pos.y)
+					for(let i = 0; i < this.listHeight.length; i++){
+						if(y >= this.listHeight[i] && y <= this.listHeight[i + 1]){
+							this.currentIndex = i;
+						}
 					}
-				}
-			})
-			let itemWrapper = this.$refs.menu_wrapper.querySelectorAll('.item_wrapper')
-			itemWrapper.forEach((item, index) => {
-				item.addEventListener('click', () => {
-					this.currentIndex = index
-					goodsWrapper.scrollTo(0, -this.listHeight[index], 400)
+				})
+				let itemWrapper = this.$refs.item_wrapper
+				itemWrapper.forEach((item, index) => {
+					item.addEventListener('click', () => {
+						this.currentIndex = index
+						goodsWrapper.scrollTo(0, -this.listHeight[index], 400)
+					})
 				})
 			})
 		})

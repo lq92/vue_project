@@ -1,5 +1,5 @@
 <template>
-	<div class='head'>
+	<div class='head' v-if='seller !== null'>
 		<img class='bg' :src='seller.avatar'>
 		<div class='seller_info'>
 			<div class='avatar'>
