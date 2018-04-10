@@ -98,7 +98,13 @@ export default {
 			})
 		},
 		clear(){
-			this.selectedFoods = []
+			this.goods.forEach(item => {
+				item.foods.forEach(food => {
+					if(food.count){
+						food.count = 0;
+					}
+				})
+			})
 		},
 		clickFood(food){
 			this.food = food;
@@ -109,16 +115,18 @@ export default {
 		}
 	},
 	computed: {
-		selectedFoods(){
-			let results = [];
-			this.goods.forEach(item => {
-				item.foods.forEach(food => {
-					if(food.count){
-						results.push(food)
-					}
+		selectedFoods: {
+			get(){
+				let results = [];
+				this.goods.forEach(item => {
+					item.foods.forEach(food => {
+						if(food.count){
+							results.push(food)
+						}
+					})
 				})
-			})
-			return results
+				return results
+			}
 		},
 		totalCount(){
 			let count = 0;

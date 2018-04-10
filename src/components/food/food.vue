@@ -1,38 +1,40 @@
 <template>
-	<div class='food' v-show='isShow' ref='food'>
-		<div class='wrapper'>
-			<div class='info_wrapper'>
-				<img width='100%' height='auto' :src='food.image'>
-				<div class='info'>
-					<h3 class='name'>{{ food.name }}</h3>
-					<p class='sell_count'>月售{{ food.sellCount }}份<span class='rating'>好评率{{ food.rating }}%</span></p>
-					<p class='price'>{{ food.price | formatePrice }}<span class='old_price' v-if='food.oldPrice'>{{ food.oldPrice | formatePrice }}</span></p>
-				</div>
-				<span class='btn'>加入购物车</span>
-			</div>
-			<gutter />
-			<div class='introduct'>
-				<h3 class='title'>商品介绍</h3>
-				<p class='text'>{{ food.info }}</p>
-			</div>
-			<gutter />
-			<div class='ratings' v-if='food.ratings'>
-				<select-btns :ratings='food.ratings' v-show='food' :description='description' :select-type='selectType' :only-content='onlyContent' @selectRatings='selectRatings' @onlyContent='toggle'></select-btns>
-        <div class='item' v-for='item in food.ratings' v-show='select(item)' v-if='food.ratings.length > 0'>
-          <span class='time'>{{ item.rateTime }}</span>
-          <p class='text'><i class='rate_type' :class='{icon_thumb_up: item.rateType === 0, icon_thumb_down: item.rateType === 1}'></i>{{ item.text }}</p>
-          <div class='user'>
-            <span class='user_name'>{{ item.username }}</span>
-            <img class='avatar' :src='item.avatar'>
+  <transition name='fadeIn'>
+  	<div class='food' v-show='isShow' ref='food'>
+  		<div class='wrapper'>
+  			<div class='info_wrapper'>
+  				<img width='100%' height='auto' :src='food.image'>
+  				<div class='info'>
+  					<h3 class='name'>{{ food.name }}</h3>
+  					<p class='sell_count'>月售{{ food.sellCount }}份<span class='rating'>好评率{{ food.rating }}%</span></p>
+  					<p class='price'>{{ food.price | formatePrice }}<span class='old_price' v-if='food.oldPrice'>{{ food.oldPrice | formatePrice }}</span></p>
+  				</div>
+  				<span class='btn'>加入购物车</span>
+  			</div>
+  			<gutter />
+  			<div class='introduct'>
+  				<h3 class='title'>商品介绍</h3>
+  				<p class='text'>{{ food.info }}</p>
+  			</div>
+  			<gutter />
+  			<div class='ratings' v-if='food.ratings'>
+  				<select-btns :ratings='food.ratings' v-show='food' :description='description' :select-type='selectType' :only-content='onlyContent' @selectRatings='selectRatings' @onlyContent='toggle'></select-btns>
+          <div class='item' v-for='item in food.ratings' v-show='select(item)' v-if='food.ratings.length > 0'>
+            <span class='time'>{{ item.rateTime }}</span>
+            <p class='text'><i class='rate_type' :class='{icon_thumb_up: item.rateType === 0, icon_thumb_down: item.rateType === 1}'></i>{{ item.text }}</p>
+            <div class='user'>
+              <span class='user_name'>{{ item.username }}</span>
+              <img class='avatar' :src='item.avatar'>
+            </div>
           </div>
-        </div>
-			</div>
-      <div class='no_ratings' v-else><h2>暂无评价</h2></div>
-			<div class='back' @click='hide'>
-				<i class='icon_arrow_lift'></i>
-			</div>
-		</div>
-	</div>
+  			</div>
+        <div class='no_ratings' v-else><h2>暂无评价</h2></div>
+  		</div>
+      <div class='back' @click='hide'>
+        <i class='icon_arrow_lift'></i>
+      </div>
+  	</div>
+  </transition>
 </template>
 
 <script>
@@ -165,14 +167,7 @@ export default {
   		.text
   			font-size: 12px
   			color: rgb(77, 85, 93)
-  			line-height: 24px
-  	.back
-  		position: absolute
-  		left: 10px
-  		top: 10px
-  		.icon_arrow_lift
-  			font-size: 20px
-  			color: rgb(255, 255, 255)		
+  			line-height: 24px	  
   .ratings
     .item
       display: flex
@@ -223,4 +218,16 @@ export default {
     color: rgba(7, 17, 27, 0.8)   
     text-align: center
     padding: 20px 0   
+  .back
+    position: absolute
+    left: 10px
+    top: 10px
+    .icon_arrow_lift
+      font-size: 20px
+      color: rgb(255, 255, 255) 
+  &.fadeIn-enter-active, &.fadeIn-leave-active
+    transition: 0.5s all   
+  &.fadeIn-enter, &.fadeIn-leave-to
+    opacity: 0 
+    transform: translateX(100%)
 </style>

@@ -13,26 +13,30 @@
 			</div>
 			<div class='settle' :class='{ active: this.totalPrice >= this.seller.minPrice }'>{{ settleBtn }}</div>
 		</div>
-		<div class='cart_info' v-show='isShow'>
-			<div class='cart_info_wrapper'>
-				<header>
-					<span class='title'>购物车</span>
-					<span class='clear' @click='clear'>清空</span>
-				</header>
-				<main ref='content_hook'>
-					<div class='content'>
-						<div class='item_wrapper' v-for='item in selectedFoods'>
-							<p class='name'>{{ item.name }}</p>
-							<p class='price'>{{ item.price | formatePrice }}</p>
-							<div class='count_btn_wrapper'>
-								<count-btn :food='item'></count-btn>
+		<transition name='fadeIn'>
+			<div class='cart_info' v-show='isShow && selectedFoods.length > 0'>
+				<div class='cart_info_wrapper'>
+					<header>
+						<span class='title'>购物车</span>
+						<span class='clear' @click='clear'>清空</span>
+					</header>
+					<main ref='content_hook'>
+						<div class='content'>
+							<div class='item_wrapper' v-for='item in selectedFoods'>
+								<p class='name'>{{ item.name }}</p>
+								<p class='price'>{{ item.price | formatePrice }}</p>
+								<div class='count_btn_wrapper'>
+									<count-btn :food='item'></count-btn>
+								</div>
 							</div>
-						</div>
-					</div>	
-				</main>
+						</div>	
+					</main>
+				</div>
 			</div>
-		</div>
-		<div class='mask' v-show='isShow' @click='toggle'></div>
+		</transition>	
+		<transition name='fadeIn'>
+			<div class='mask' v-show='isShow && selectedFoods.length > 0' @click='toggle'></div>
+		</transition>
 	</div>	
 </template>
 
@@ -203,7 +207,11 @@ export default {
 	background: rgb(255, 255, 255)
 	padding-bottom: 22px
 	z-index: 45
-	overflow: hidden
+	overflow: hidden	
+	&.fadeIn-enter-active, &.fadeIn-leave-active
+		transition: 0.8s all
+	&.fadeIn-enter, &.fadeIn-leave-to
+		transform: translateY(100%)
 	.cart_info_wrapper
 		header
 			display: flex
@@ -256,5 +264,9 @@ export default {
 	background: rgba(7, 17, 27, 0.6)		
 	z-index: 40  
 	backdrop-filter: blur(10px)
-	overflow: hidden			
+	overflow: hidden		
+	&.fadeIn-enter-active, &.fadeIn-leave-active
+		transition: 0.8s all
+	&.fadeIn-enter, &.fadeIn-leave-to
+		opacity: 0	
 </style>
