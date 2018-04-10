@@ -29,7 +29,7 @@ export default {
   components: {
     vHead
   },
-  created(){
+  beforeCreate(){
     this.$http.get('/api/goods').then(res => {
       this.goods = res.body.goods;
     })

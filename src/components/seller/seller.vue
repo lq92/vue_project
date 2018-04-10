@@ -1,7 +1,7 @@
 <template>
 	<div class='seller' ref='seller_wrapper'>
 		<div class='container'>
-			<div class='test' v-if='seller !== null'>
+			<div class='test'>
 				<div class='description'>
 					<div class='name_wrapper'>
 						<div class='section_left'>
@@ -13,13 +13,9 @@
 							</div>
 						</div>
 						<div class='section_right' @click='collect'>
-							<div v-if='collection' class='favorite'>
-								<i class='icon_favorite icon_active'></i>
-								<span class='text_active text'>已收藏</span>
-							</div>
-							<div v-else class='favorite'>
-								<i class='icon_favorite'></i>
-								<span class='text'>收藏</span>
+							<div class='favorite'>
+								<i class='icon_favorite' :class='{icon_active: collection}'></i>
+								<span class='text'>{{ collectText }}</span>
 							</div>
 						</div>
 					</div>
@@ -74,14 +70,11 @@ import gutter from '~/gutter/gutter'
 import score from '~/score/score'
 import discount from '~/discount/discount'
 export default {
-	props: {
-		seller: Object
-	},
 	data(){
 		return {
+			seller: {},
 			seller_page: 'seller_page',
-			collection: JSON.parse(localStorage.getItem('collection')),
-			sellerCopy: {}
+			collection: JSON.parse(localStorage.getItem('collection'))
 		}
 	},
 	components: {
@@ -89,22 +82,29 @@ export default {
 		score,
 		discount
 	},
-	updated() {
-		this.$nextTick(() => {
+	mounted(){
+		this.$http.get('/api/seller').then(res => {
+			this.seller = res.body.seller
 			this._initScroll()
 		})
-	},	
+	},
 	methods: {
-		collect(){
+		collect(ev){
 			localStorage.setItem('collection', !JSON.parse(localStorage.getItem('collection')))
 			this.collection = this._collection()
+			console.log(1)
 		},
 		_collection(){
 			return !!JSON.parse(localStorage.getItem('collection'));
 		},
 		_initScroll(){
-			new BScroll(this.$refs.pic_wrapper, { scrollX: true }).refresh()
-			new BScroll(this.$refs.seller_wrapper, { click: true }).refresh()
+			new BScroll(this.$refs.pic_wrapper, { scrollX: true })
+			new BScroll(this.$refs.seller_wrapper, { click: true })
+		}
+	},
+	computed: {
+		collectText(){
+			return this.collection ? '已收藏' : '收藏' 
 		}
 	}
 }	
@@ -145,6 +145,9 @@ export default {
 					display: flex
 					flex-direction: column
 					align-items: center
+					padding: 6px
+					margin: -6px
+					box-sizing: border-box
 					.icon_favorite
 						font-size: 18px
 						color: rgba(147, 153, 159, 0.4)	
