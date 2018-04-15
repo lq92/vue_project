@@ -32,7 +32,7 @@
 			</div>
 		</div>
 		<cart :selected-foods='selectedFoods' :seller='seller' @clearFoods='clear'></cart>
-		<food :food='food' :is-show='isShow' @hide='hide'></food>
+		<food :food='food' :is-show='isShow' @hide='hide' @addtocart='addToCart(food)'></food>
 	</div>
 </template>
 
@@ -112,6 +112,9 @@ export default {
 		},
 		hide(){
 			this.isShow = false;
+		},
+		addToCart(){
+			this.$set(this.food, 'count', 1)
 		}
 	},
 	computed: {

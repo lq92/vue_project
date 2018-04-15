@@ -9,7 +9,10 @@
   					<p class='sell_count'>月售{{ food.sellCount }}份<span class='rating'>好评率{{ food.rating }}%</span></p>
   					<p class='price'>{{ food.price | formatePrice }}<span class='old_price' v-if='food.oldPrice'>{{ food.oldPrice | formatePrice }}</span></p>
   				</div>
-  				<span class='btn'>加入购物车</span>
+  				<div class='btn'>
+            <count-btn v-if='food.count' :food='food'></count-btn>  
+            <div class='cart_text' @click='addToCart(food)' v-else>加入购物车</div>  
+          </div>
   			</div>
   			<gutter />
   			<div class='introduct'>
@@ -44,6 +47,7 @@ const NEGATIVE = 1;
 import BScroll from 'better-scroll'
 import gutter from '~/gutter/gutter'
 import selectBtns from '~/select_btns/select_btns'
+import countBtn from '~/count_btn/count_btn'
 export default {
   data(){
     return {
@@ -82,6 +86,9 @@ export default {
       }else{
         return this.selectType === item.rateType
       }
+    },
+    addToCart(food){
+      this.$emit('addtocart')
     }
   },
 	filters: {
@@ -94,7 +101,8 @@ export default {
 	},
 	components: {
 		gutter,
-		selectBtns
+		selectBtns,
+    countBtn
 	}
 }	
 </script>
@@ -146,16 +154,6 @@ export default {
   			position: absolute
   			right: 18px
   			bottom: 18px
-  			width: 74px
-  			height: 24px
-  			text-align: center
-  			line-height: 24px
-  			background: rgb(0, 160, 220)
-  			color: rgb(255, 255, 255)
-  			border-radius: 10px			
-  			font: 
-  				size: 10px
-  				weight: 400
   	.introduct
   		padding: 18px
   		.title
@@ -230,4 +228,17 @@ export default {
   &.fadeIn-enter, &.fadeIn-leave-to
     opacity: 0 
     transform: translateX(100%)
+</style>
+<style lang='sass'> 
+.cart_text
+  width: 74px
+  height: 24px
+  background: rgb(0, 160, 220) 
+  color: rgb(255, 255, 255)
+  line-height: 24px
+  text-align: center
+  font: 
+    size: 10px
+    weight: 400
+  border-radius: 10px 
 </style>
