@@ -97,6 +97,7 @@ export default {
 		},
 		clear(){
 			this.$emit('clearFoods')
+			this.isShow = false;
 		}
 	},
 	filters: {
