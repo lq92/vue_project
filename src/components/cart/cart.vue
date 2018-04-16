@@ -14,7 +14,7 @@
 			<div class='settle' :class='{ active: this.totalPrice >= this.seller.minPrice }'>{{ settleBtn }}</div>
 		</div>
 		<transition name='fadeIn'>
-			<div class='cart_info' v-show='isShow && selectedFoods.length > 0'>
+			<div class='cart_info' v-show='isShow'>
 				<div class='cart_info_wrapper'>
 					<header>
 						<span class='title'>购物车</span>
@@ -35,7 +35,7 @@
 			</div>
 		</transition>	
 		<transition name='fadeIn'>
-			<div class='mask' v-show='isShow && selectedFoods.length > 0' @click='toggle'></div>
+			<div class='mask' v-show='isShow' @click='toggle'></div>
 		</transition>
 	</div>	
 </template>
@@ -60,7 +60,7 @@ export default {
 	},
 	data(){
 		return {
-			isShow: false
+			fold: true
 		}
 	},
 	computed: {
@@ -86,18 +86,25 @@ export default {
 			}else{
 				return `去结算`
 			}
+		},
+		isShow(){
+			if(!this.totalCount){
+				this.fold = true;
+				return false;
+			}
+			let show = !this.fold;
+			return show;
 		}
 	},
 	methods: {
 		toggle(){
-			if(this.selectedFoods){
-				this.isShow = !this.isShow
+			if(this.totalCount){
 				new BScroll(this.$refs.content_hook, { click: true })
+				this.fold = !this.fold
 			}
 		},
 		clear(){
 			this.$emit('clearFoods')
-			this.isShow = false;
 		}
 	},
 	filters: {
