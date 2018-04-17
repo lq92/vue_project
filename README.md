@@ -2,20 +2,17 @@
 
 > A Vue.js project
 
-## Build Setup
+## 项目运行
+```
+# 克隆到本地
+git clone https://github.com/lq92/vue_project.git
 
-``` bash
-# install dependencies
+# 进入文件夹
+cd vue-project
+
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:8080
+#开启本地服务器预览
 npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
